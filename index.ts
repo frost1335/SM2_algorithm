@@ -38,6 +38,16 @@ class SM2 {
                 }
             }
         }
+
+        else if (params.state === CardStates.Reviewing) {
+            if (params.q === QGrade.Again) {
+                params.state = CardStates.Relearning
+                params.n = 0
+                params.EF -= 0.2;
+                params.stepIndex = 1
+                params.I = relearningSteps[params.stepIndex];
+            }
+        }
     }
 }
 
