@@ -1,15 +1,52 @@
 class SM2 {
-    public execute() {
+    public execute(params: Params) {
+        if (CardStates.New === params.state) {
+            params.state = CardStates.Learning
+        }
 
+        if (params.state === CardStates.Learning) {
+            if (params.q < QGrade.Good) {
+                // Repeat current step
+                params.stepIndex = 0
+                params.I = learningSteps[0]
+            }
+            else {
+                if (params.q === QGrade.Good) {
+                    params.stepIndex += 1
+
+                    if (params.stepIndex < learningSteps.length) {
+                        params.I = learningSteps[params.stepIndex];
+                    }
+                    else {
+                        // Graduated to review
+                        params.state = CardStates.Reviewing;
+                        params.n = 1;
+                        params.I = 1;
+                    }
+                }
+                else {
+                    if (params.stepIndex === 0) {
+                        params.state = CardStates.Reviewing;
+                        params.n = 1;
+                        params.I = 1; // 1 day
+                    }
+                    else {
+                        params.state = CardStates.Reviewing;
+                        params.n = 2;
+                        params.I = reviewingSteps[0];
+                    }
+                }
+            }
+        }
     }
 }
 
 interface Params {
     state: CardStates
-    q: QGrade 
+    q: QGrade
     stepIndex: number
     n: number
-    I: number 
+    I: number
     EF: number
 }
 
@@ -21,13 +58,13 @@ enum CardStates {
 }
 
 const learningSteps = [
-    1/1440,
-    10/1440
+    1 / 1440,
+    10 / 1440
 ]
 
 const relearningSteps = [
-    1/1440,
-    6/1440
+    1 / 1440,
+    6 / 1440
 ]
 
 const reviewingSteps = [
