@@ -46,26 +46,3 @@
 
 ---
 
-## 💡 Пример использования
-
-```ts
-import { sm2 } from './sm2';
-
-const card = {
-  easiness: 2.5,
-  interval: 1,
-  repetitions: 0,
-  lastReview: new Date(),
-};
-
-const quality = 4; // пользователь оценил ответ на 4 из 5
-
-const updatedCard = sm2(card, quality);
-
-console.log(updatedCard);
-// {
-//   easiness: 2.6,
-//   interval: 6,
-//   repetitions: 1,
-//   nextReview: [дата следующего повторения]
-// }
