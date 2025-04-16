@@ -47,6 +47,56 @@ class SM2 {
                 params.stepIndex = 1
                 params.I = relearningSteps[params.stepIndex];
             }
+            else if (params.q === QGrade.Hard) {
+                params.I *= 0.5
+                params.n = params.n
+            }
+            else if (params.q === QGrade.Good) {
+                if (params.n === 1) {
+                    params.I = reviewingSteps[0]
+                }
+                else if (params.n === 2) {
+                    params.I = reviewingSteps[1]
+                }
+                else {
+                    params.I = Math.round(params.I * params.EF)
+                }
+
+                params.n += 1
+                params.EF = params.EF + (0.1 - (5 - params.q) * (0.08 + (5 - params.q) * 0.02))
+            }
+            else {
+                if (params.n === 1) {
+                    params.I = reviewingSteps[1]
+                }
+                else if (params.n === 2) {
+                    params.I = reviewingSteps[2]
+                }
+                else {
+                    params.I = Math.round(params.I * params.EF)
+                }
+
+                params.n += 1
+                params.EF = params.EF + (0.1 - (5 - params.q) * (0.08 + (5 - params.q) * 0.02))
+            }
+        }
+        else if (params.state === CardStates.Relearning) {
+            if (params.q === QGrade.Again) {
+                params.n = 0
+                params.EF = params.EF + (0.1 - (5 - params.q) * (0.08 + (5 - params.q) * 0.02))
+                params.stepIndex = 0
+                params.I = relearningSteps[params.stepIndex]; 
+            }
+            else if (params.q === QGrade.Hard) {
+                params.state = CardStates.Learning
+                params.stepIndex = 1
+                params.n = 0
+                params.I = relearningSteps[params.stepIndex];
+            }
+            else {
+                params.state = CardStates.Reviewing
+            }
+            
         }
     }
 }
